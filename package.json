@@ -1,0 +1,23 @@
+{
+  "name": "church-slide-builder",
+  "version": "0.0.0",
+  "description": "App to automate type-setting slides for RiverCharlotte.com",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_ENV=development node ./",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dustan Kasten <dustan.kasten@gmail.com>",
+  "license": "GPL",
+  "dependencies": {
+    "envify": "^1.2.1",
+    "hapi": "^6.0.2",
+    "node-jsx": "^0.10.0",
+    "react": "^0.10.0"
+  },
+  "devDependencies": {
+    "jsx-loader": "^0.10.2",
+    "nodemon": "^1.2.0",
+    "webpack": "^1.3.1-beta4"
+  }
+}
