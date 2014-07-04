@@ -47,6 +47,16 @@ server.route({
   }
 });
 
+server.route({
+  path: '/favicon.ico',
+  method: 'GET',
+  config: {
+    handler: function(req, reply) {
+      reply().code(204);
+    }
+  }
+});
+
 // static file server
 server.route({
   method: 'GET',
