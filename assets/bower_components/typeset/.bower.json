@@ -1,0 +1,14 @@
+{
+  "name": "typeset",
+  "homepage": "https://github.com/bramstein/typeset",
+  "_release": "9651216e95",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "9651216e95e451350112d33b4656d9bfa54fd4d9"
+  },
+  "_source": "https://github.com/bramstein/typeset.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/bramstein/typeset.git",
+  "_direct": true
+}
