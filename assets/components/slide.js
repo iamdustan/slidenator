@@ -15,6 +15,17 @@ var TOP_MARGIN = 120;
 
 var Slide = React.createClass({
 
+  exportSuffix: function() {
+    if (!this.slides) return '';
+    var CHAR_CODE_START = 97; // 97 => 'a'
+
+    return String.fromCharCode(CHAR_CODE_START + this.activeIndex);
+  },
+
+  toDataURL: function() {
+    return this.getDOMNode().toDataURL('image/png');
+  },
+
   slide: function() {
     return this.activeSlide || this.props.data;
   },
@@ -23,7 +34,7 @@ var Slide = React.createClass({
     var slide = this.slide();
     if (typeof slide === 'undefined') return;
 
-    var canvas = document.getElementById('canvas');
+    var canvas = this.getDOMNode();
     var ctx = canvas.getContext('2d');
     var x = canvas.width / 2;
     var y = TOP_MARGIN;

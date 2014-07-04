@@ -80,4 +80,12 @@ button {
   transition: transform 0.05s linear;
 }
 
+#tools {
+  position: fixed;
+  top: 53px;
+  right: 0;
+  width: 200px;
+  background: #fff;
+  border-left: 2px solid #ccc;
+}
 

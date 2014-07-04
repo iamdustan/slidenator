@@ -146,7 +146,6 @@
       var linesPerSlide = Math.ceil(lines.length / numberOfSlides);
 
       this.content = lines.slice(0, linesPerSlide).reduce(function(s, c) { return s + c.text; }, '');
-      //console.log(0, linesPerSlide, this.content);
 
       var newSlides = Array.apply(0, Array(numberOfSlides-1)).map(function(_, i) {
         var c = this.clone();
@@ -154,7 +153,6 @@
         var endIndex = startIndex + linesPerSlide;
         c.content = lines.slice(startIndex, endIndex).reduce(function(s, c) { return s + c.text; }, '');
 
-        //console.log(startIndex, endIndex, c.content);
         return c;
       }, this);
 

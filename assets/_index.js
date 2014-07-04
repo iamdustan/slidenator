@@ -1,25 +1,21 @@
 /** @jsx React.DOM */
 
 var React = require('react/addons');
-var Joi = require('joi');
-var last = function(a) { return a[a.length - 1]; };
+
+function last(a) { return a[a.length - 1]; };
+function pad(a) { return (a < 10 ? '0' : '') + a; }
 
 var KEYS = {
   37: 'prev',
   39: 'next'
 };
 
-//var Navigation = require('./components/navigation.js');
+var slideSchema = require('./data/slide-schema')
 var SLIDES = require('./data/slides');
-/*
-var SLIDES = [
-  { content: 'This is some content that will be laid out automatically. Slide navigation currently borked. :)' }
-];
-*/
 
 var Form = require('./components/form');
 var Modal = require('./components/modal');
-var Ripple = require('./components/react-ripple');
+var RippleButton = require('./components/ripple-button');
 var Slide = require('./components/slide');
 
 var App = React.createClass({
@@ -34,11 +30,27 @@ var App = React.createClass({
   },
 
   doSave: function() {
-    console.log('TODO: doSave');
+    var index = pad(this.state.slides.indexOf(this.state.activeSlide));
+    var filename = index + this.refs.slide.exportSuffix() + '.png';
+    var dataURL = this.refs.slide.toDataURL();
+    console.log('Saving %s', filename);
+
+    var btn = document.createElement('a');
+    btn.style.display = 'none';
+    document.body.appendChild(btn);
+    btn.href = dataURL.replace('image/png', 'image/octet-stream');
+    btn.download = filename;
+    btn.click();
+    document.body.removeChild(btn);
   },
 
   doExport: function() {
-    console.log('TODO: doExport');
+    return console.log('TODO: do export');
+    this.setState({
+      activeSlides: this.state.slides[0]
+    });
+
+    do { this.doSave(); } while (this.next());
   },
 
   onKeyPress: function(e) {
@@ -53,53 +65,40 @@ var App = React.createClass({
   },
 
   prev: function() {
-    if (this.refs.slide.prev()) return;
+    if (this.refs.slide.prev()) return true;
 
     var index = this.activeIndex();
-    if (index > 0)
-      this.setState({activeSlide: this.state.slides[index - 1], dir: 'dec'});
+    if (index <= 0) return false;
+
+    this.setState({activeSlide: this.state.slides[index - 1], dir: 'dec'});
+    return true;
   },
 
   next: function() {
-    if (this.refs.slide.next()) return;
+    if (this.refs.slide.next()) return true;
 
     var index = this.activeIndex();
-    if (index < this.state.slides.length - 1)
-      this.setState({activeSlide: this.state.slides[index + 1], dir: 'inc'});
+    if (index >= this.state.slides.length - 1) return false;
+
+    this.setState({activeSlide: this.state.slides[index + 1], dir: 'inc'});
+    return true;
   },
 
-  addSlide: function() {
-    var schema = Joi.object().keys({
-      Content: Joi.string().required(),
-      Translation: Joi.string().regex(/[a-zA-Z0-9]{3,10}/),
-      Verse: Joi.string(),
+  addSlide: function(data) {
+    var slide = {
+      content: data.Content,
+      translation: data.Translation,
+      verse: data.Verse,
+    };
+
+    var slides = React.addons.update(this.state, {
+      slides: {$push: [slide]}
+    }).slides;
+
+    this.setState({
+      slides: slides,
+      activeSlide: last(slides),
     });
-
-    this.setModal({
-      title: 'Add A New Slide',
-      content: (<Form schema={schema} onSuccess={addSlide} />)
-    });
-
-    var self = this;
-    var state = this.state;
-    function addSlide(data){
-      var slide = {
-        content: data.Content,
-        translation: data.Translation,
-        verse: data.Verse,
-      };
-
-      var slides = React.addons.update(state, {
-        slides: {$push: [slide]}
-      }).slides;
-
-      self.setState({
-        slides: slides,
-        activeSlide: last(slides),
-        modalTitle: '',
-        modalContent: '',
-      });
-    }
   },
 
   removeSlide: function() {
@@ -187,22 +186,12 @@ var App = React.createClass({
         <div className="navbar">
           <div className="logo">Sliders</div>
           <nav id="menu">
-            <button onClick={this.doSave}>
-              Save<Ripple recenteringTouch />
-            </button>
-            <button onClick={this.doExport}>
-              Export<Ripple />
-            </button>
-            <button onClick={this.addSlide}>
-              Add Slide<Ripple />
-            </button>
-            <button onClick={this.removeSlide}>
-              Remove Slide<Ripple />
-            </button>
+            <RippleButton onClick={this.doSave}>Save</RippleButton>
+            <RippleButton onClick={this.doExport}>Export</RippleButton>
           </nav>
           <div id="toolbar">
-            <button onClick={this.zoomOut}>-<Ripple /></button>
-            <button onClick={this.zoomIn}>+<Ripple /></button>
+            <RippleButton onClick={this.zoomOut}>-</RippleButton>
+            <RippleButton onClick={this.zoomIn}>+</RippleButton>
           </div>
         </div>
         <div
@@ -221,13 +210,20 @@ var App = React.createClass({
             data={this.state.activeSlide}
             dir={this.state.dir} />
         </div>
+
+        <div
+          id="tools"
+          ref="tools">
+          <Form schema={slideSchema} submitLabel="Add Slide" onSuccess={this.addSlide} />
+          <RippleButton onClick={this.removeSlide}>Remove Slide</RippleButton>
+        </div>
+
         <Modal title={this.state.modalTitle} cancelHandler={this.setModal.bind(this, {})}>
           {this.state.modalContent}
         </Modal>
       </div>
     );
   }
-
 });
 
 module.exports = App;

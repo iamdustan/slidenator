@@ -2,6 +2,7 @@
 
 var React = require('react/addons');
 var Joi = require('joi');
+var Ripple = require('./react-ripple');
 
 var Form = React.createClass({
 
@@ -67,12 +68,13 @@ var Form = React.createClass({
   },
 
   render: function() {
+    var legend = this.props.title ? <legend>{this.props.title}</legend> : <noscript />;
     return (
       <form onSubmit={this.validate}>
-        <legend>Auto generated form</legend>
+        {legend}
         {this.generateForm()}
         <div className="form__actions">
-          <button type="submit">{this.props.submitLabel || 'Submit'}</button>
+          <button type="submit">{this.props.submitLabel || 'Submit'}<Ripple /></button>
         </div>
       </form>
     );
