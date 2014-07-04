@@ -12,6 +12,9 @@
   "dependencies": {
     "envify": "^1.2.1",
     "hapi": "^6.0.2",
+    "hyphenation.en-us": "^0.2.1",
+    "hypher": "^0.2.1",
+    "joi": "^4.6.1",
     "node-jsx": "^0.10.0",
     "react": "^0.10.0"
   },

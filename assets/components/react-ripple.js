@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-var React = require('react');
+var React = require('react/addons');
 
 // from https://github.com/Polymer/paper-ripple/blob/master/paper-ripple.html
 var waveMaxRadius = 150;

@@ -1,6 +1,9 @@
 /** @jsx React.DOM */
 
-var React = require('react');
+var React = require('react/addons');
+var Joi = require('joi');
+var last = function(a) { return a[a.length - 1]; };
+
 var KEYS = {
   37: 'prev',
   39: 'next'
@@ -8,8 +11,16 @@ var KEYS = {
 
 //var Navigation = require('./components/navigation.js');
 var SLIDES = require('./data/slides');
-var Slide = require('./components/slide');
+/*
+var SLIDES = [
+  { content: 'This is some content that will be laid out automatically. Slide navigation currently borked. :)' }
+];
+*/
+
+var Form = require('./components/form');
+var Modal = require('./components/modal');
 var Ripple = require('./components/react-ripple');
+var Slide = require('./components/slide');
 
 var App = React.createClass({
   getInitialState: function() {
@@ -58,14 +69,37 @@ var App = React.createClass({
   },
 
   addSlide: function() {
-    window.newSlide = {
-      content: 'this is a verse',
-      verse: 'Alphabet Soup 1:23',
-      translation: 'WORD',
-    };
-    this.state.slides.push(newSlide);
-    this.setState({slides: this.state.slides});
-    console.log('added slide');
+    var schema = Joi.object().keys({
+      Content: Joi.string().required(),
+      Translation: Joi.string().regex(/[a-zA-Z0-9]{3,10}/),
+      Verse: Joi.string(),
+    });
+
+    this.setModal({
+      title: 'Add A New Slide',
+      content: (<Form schema={schema} onSuccess={addSlide} />)
+    });
+
+    var self = this;
+    var state = this.state;
+    function addSlide(data){
+      var slide = {
+        content: data.Content,
+        translation: data.Translation,
+        verse: data.Verse,
+      };
+
+      var slides = React.addons.update(state, {
+        slides: {$push: [slide]}
+      }).slides;
+
+      self.setState({
+        slides: slides,
+        activeSlide: last(slides),
+        modalTitle: '',
+        modalContent: '',
+      });
+    }
   },
 
   removeSlide: function() {
@@ -76,20 +110,11 @@ var App = React.createClass({
     console.log('removed slide');
   },
 
-  downAction: function() {
-  },
-
-  moveAction: function() {
-  },
-
-  upAction: function() {
-  },
-
   componentDidUnmount: function() {
     document.body.removeEventListener('keydown', this.onKeyPress, false);
   },
 
-  componentDidMount: function() {
+  componentWillMount: function() {
     document.body.addEventListener('keydown', this.onKeyPress, false);
   },
 
@@ -130,31 +155,49 @@ var App = React.createClass({
   },
 
   upAction: function() {
-    console.log('upAction');
     this.isMoving = false;
+  },
+
+  setModal: function(data) {
+    this.setState({
+      modalTitle: data.title,
+      modalContent: data.content
+    });
+  },
+
+  componentDidMount: function() {
+    var artboard = this.refs.artboard.getDOMNode();
+    var slide = this.refs.slide.getDOMNode();
+    var aw = artboard.clientWidth;
+    var ah = artboard.clientHeight;
+    var sw = slide.clientWidth;
+    var sh = slide.clientHeight;
+    var scale = aw / sw;
+    if (aw > sw) scale = 1;
+    this.setState({
+      zoom: scale * 100,
+      translateX: -(sw - aw) / 2 / scale,
+      translateY: (ah - sh) / 8 / scale,
+    });
   },
 
   render: function() {
     return (
-      <div onKeyPress={this.onKeyPress}>
+      <div>
         <div className="navbar">
           <div className="logo">Sliders</div>
           <nav id="menu">
             <button onClick={this.doSave}>
-              Save
-              <Ripple recenteringTouch />
+              Save<Ripple recenteringTouch />
             </button>
             <button onClick={this.doExport}>
-              Export
-              <Ripple />
+              Export<Ripple />
             </button>
             <button onClick={this.addSlide}>
-              Add Slide
-              <Ripple />
+              Add Slide<Ripple />
             </button>
             <button onClick={this.removeSlide}>
-              Remove Slide
-              <Ripple />
+              Remove Slide<Ripple />
             </button>
           </nav>
           <div id="toolbar">
@@ -164,6 +207,7 @@ var App = React.createClass({
         </div>
         <div
           id="artboard"
+          ref="artboard"
           onMouseDown={this.downAction}
           onMouseMove={this.moveAction}
           onMouseUp={this.upAction}>
@@ -177,6 +221,9 @@ var App = React.createClass({
             data={this.state.activeSlide}
             dir={this.state.dir} />
         </div>
+        <Modal title={this.state.modalTitle} cancelHandler={this.setModal.bind(this, {})}>
+          {this.state.modalContent}
+        </Modal>
       </div>
     );
   }

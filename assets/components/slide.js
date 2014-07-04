@@ -1,6 +1,10 @@
 /** @jsx React.DOM */
 
-var React = require('react');
+var React = require('react/addons');
+
+var simple = require('../layout/simple');
+var knuthPlass = require('../layout/knuth-plass');
+var useKnuthPlass = false;
 
 var WIDTH = 1280;
 var HEIGHT = 720;
@@ -17,6 +21,7 @@ var Slide = React.createClass({
 
   draw: function() {
     var slide = this.slide();
+    if (typeof slide === 'undefined') return;
 
     var canvas = document.getElementById('canvas');
     var ctx = canvas.getContext('2d');
@@ -39,76 +44,18 @@ var Slide = React.createClass({
     }
 
     ctx.font = '300 64px Gotham';
-    this.layoutText(ctx, x, y);
+    if (useKnuthPlass) {
+      ctx.translate((WIDTH - MAX_WIDTH) / 2,  TOP_MARGIN);
+      knuthPlass.call(this, slide, ctx, null, [MAX_WIDTH], 64 * 1.4, null);
+      ctx.translate(-(WIDTH - MAX_WIDTH) / 2, -TOP_MARGIN);
+    }
+    else {
+      simple.call(this, slide, ctx, x, y);
+    }
 
     ctx.restore();
 
     canvas.style.transform = this.getTransformString();
-  },
-
-  layoutText: function(ctx, x, y) {
-    var slide = this.slide();
-    var LOCAL_MAX = slide.verse ? MAX_LINES : ALT_MAX_LINES;
-    var words = slide.content.split(' ');
-    var lines = [];
-    var line = '';
-
-    for (var n = 0; n < words.length; n++) {
-      var testLine = line + words[n];
-      var metrics = ctx.measureText(testLine);
-      var testWidth = metrics.width;
-      if (testWidth > MAX_WIDTH && n > 0) {
-        lines.push({text: line, x: x, y: y });
-        line = words[n] + ' ';
-        y += Math.floor(64 * 1.4);
-      }
-      else {
-        line = testLine + ' ';
-      }
-    }
-    lines.push({text: line, x: x, y: y});
-
-    if (lines.length <= LOCAL_MAX) {
-      return lines.forEach(function(a) {
-        var y = (lines.length < 3) ? a.y + (64 * 1.4 * 2)
-          : (lines.length < 5) ? a.y + (64 * 1.4)
-          : a.y;
-
-        ctx.fillText(a.text, a.x, y);
-      });
-    }
-
-    var numberOfSlides = Math.ceil(lines.length / LOCAL_MAX);
-    var slideDispersion = this.getSlideDispersion(numberOfSlides, lines.length);
-
-    this.slides = Array.apply(0, Array(numberOfSlides)).map(function(_, i) {
-      //var startIndex = linesPerSlide * i;
-      //var endIndex = startIndex + linesPerSlide;
-      var endIndex = slideDispersion[i];
-      return {
-        content: lines.splice(0, endIndex).reduce(function(s, c) { return s + c.text; }, ''),
-        verse: slide.verse,
-        translation: slide.translation
-      };
-    });
-
-    this.activeIndex = 0;
-    if (this.props.dir === 'dec')
-      this.activeIndex = this.slides.length - 1;
-
-    this.activeSlide = this.slides[this.activeIndex];
-    this.draw();
-  },
-
-  getSlideDispersion: function(slidesCount, total) {
-    var dispersion = Array.apply(0, Array(total)).reduce(function(memo, _, i) {
-      var _i = i % slidesCount;
-      if (typeof memo[_i] === 'undefined') memo[_i] = 0;
-      memo[_i]++;
-      return memo;
-    }, {});
-
-    return dispersion;
   },
 
   getTransformString: function() {
@@ -116,10 +63,7 @@ var Slide = React.createClass({
     if (!transform)
       return 'scale(1)';
 
-    var str = 'scale(' + (transform.zoom / 100) + ') translate(' + transform.translateX + 'px,' + transform.translateY + 'px)';
-
-    console.log(str);
-    return str;
+    return 'scale(' + (transform.zoom / 100) + ') translate(' + transform.translateX + 'px,' + transform.translateY + 'px)';
   },
 
   prev: function() {
