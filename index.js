@@ -1,6 +1,7 @@
-// allow jsx to be seamlessly required for view rendering
 
 var port = process.env.PORT || 8000;
+
+// allow jsx to be seamlessly required for view rendering
 require('node-jsx').install({harmony: true});
 
 var Hapi = require('hapi');
@@ -9,14 +10,25 @@ var server = Hapi.createServer('localhost', port, {
   files: { relativeTo: path.join(__dirname, 'public'), }
 });
 
-if (process.env.NODE_ENV === 'development') {
-  // TODO: pre-compile this in production
-  var webpack = require('webpack');
-  var compiler = webpack(require('./webpack.config'));
+var webpack = require('webpack');
+var compiler = webpack(require('./webpack.config'));
 
+switch (process.env.NODE_ENV) {
+case 'development':
   compiler.watch(200, function(err, stats) {
     if (err) console.error('watch', err);
     console.info('webpack recompiled');
+  });
+  break;
+
+default:
+  console.info('Webpack: compilation: started.');
+  compiler.run(function(err, stats) {
+    if (err) {
+      console.error('Failed to compile assets');
+      throw err;
+    }
+    console.info('Webpack compilation: complete.');
   });
 }
 
@@ -32,6 +44,7 @@ var React = require('react');
 var PLACEHOLDER = 'If you see this then something is wrong.';
 var TEMPLATE = fs.readFileSync('./assets/index.html', {encoding: 'utf8'});
 
+// React app.
 var App = require('./assets/_index.js');
 
 server.route({
