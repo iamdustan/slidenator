@@ -114,6 +114,8 @@ var App = React.createClass({
   },
 
   componentWillMount: function() {
+    if (typeof document === 'undefined') return;
+
     document.body.addEventListener('keydown', this.onKeyPress, false);
   },
 
