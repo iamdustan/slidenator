@@ -1,12 +1,12 @@
 
-var port = process.env.PORT || 8000;
+var port = +(process.env.PORT || 8000);
 
 // allow jsx to be seamlessly required for view rendering
 require('node-jsx').install({harmony: true});
 
 var Hapi = require('hapi');
 var path = require('path');
-var server = Hapi.createServer('localhost', port, {
+var server = Hapi.createServer(port, '0.0.0.0', {
   files: { relativeTo: path.join(__dirname, 'public'), }
 });
 
