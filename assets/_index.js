@@ -1,5 +1,8 @@
 /** @jsx React.DOM */
 
+if (typeof process === 'undefined')
+  require('./stylesheet.css');
+
 var React = require('react/addons');
 
 function last(a) { return a[a.length - 1]; };

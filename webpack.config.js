@@ -9,9 +9,14 @@ module.exports = {
     path: path.join(__dirname, STATIC_ROOT),
     filename: 'app.js'
   },
+  stats: {
+    colors: true,
+    reasons: true
+  },
   module: {
     loaders: [
-      {test: /\.js$/, loader: 'jsx-loader?harmony'}
+      {test: /\.css$/, loader: 'style-loader!css-loader'},
+      {test: /\.js$/, loader: 'jsx-loader?harmony'},
     ]
   },
   resolve: {
