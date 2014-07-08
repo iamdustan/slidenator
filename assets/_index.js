@@ -14,7 +14,8 @@ var KEYS = {
 };
 
 var slideSchema = require('./data/slide-schema')
-var SLIDES = require('./data/slides');
+//var SLIDES = require('./data/slides');
+var SLIDES = [];
 
 var Form = require('./components/form');
 var Modal = require('./components/modal');
