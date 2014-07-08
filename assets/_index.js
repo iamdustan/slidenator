@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 
-if (typeof process === 'undefined')
+if (typeof process === 'undefined' || process.title === 'browser')
   require('./stylesheet.css');
 
 var React = require('react/addons');
