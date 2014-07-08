@@ -190,7 +190,7 @@ var App = React.createClass({
     return (
       <div>
         <div className="navbar">
-          <div className="logo">Sliders</div>
+          <div className="logo">Slidenator</div>
           <nav id="menu">
             <RippleButton onClick={this.doSave}>Save</RippleButton>
             <RippleButton onClick={this.doExport}>Export</RippleButton>
