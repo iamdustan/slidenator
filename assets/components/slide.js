@@ -4,6 +4,7 @@ var React = require('react/addons');
 
 var simple = require('../layout/simple');
 var knuthPlass = require('../layout/knuth-plass');
+var list = require('../layout/list');
 var useKnuthPlass = false;
 
 var WIDTH = 1280;
@@ -33,6 +34,7 @@ var Slide = React.createClass({
   draw: function() {
     var slide = this.slide();
     if (typeof slide === 'undefined') return;
+    if (slide.type === 'list') return this.drawList();
 
     var canvas = this.getDOMNode();
     var ctx = canvas.getContext('2d');
@@ -65,8 +67,29 @@ var Slide = React.createClass({
     }
 
     ctx.restore();
+  },
 
-    canvas.style.transform = this.getTransformString();
+  drawList: function() {
+    var slide = this.slide();
+    var canvas = this.getDOMNode();
+    var ctx = canvas.getContext('2d');
+    var x = canvas.width / 2;
+    var y = TOP_MARGIN;
+
+    ctx.save();
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'center';
+
+    ctx.font = '300 54px Gotham';
+    ctx.fillText(slide.title, x, 80);
+
+    ctx.textAlign = 'left';
+    x = (WIDTH - MAX_WIDTH) / 2;
+
+    list.call(this, slide, ctx, x, y);
   },
 
   getTransformString: function() {
@@ -102,13 +125,17 @@ var Slide = React.createClass({
   },
 
   componentDidMount: function() {
-    this.draw();
+    //this.draw();
   },
 
   componentWillReceiveProps: function(props) {
     // ensure that the component has update the props
     this.activeIndex = this.activeSlide = this.slides = null;
     setTimeout(this.draw);
+    var self = this;
+    setTimeout(function() {
+      canvas.style.transform = self.getTransformString();
+    });
   },
 
   render: function() {

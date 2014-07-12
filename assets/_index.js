@@ -5,7 +5,7 @@ if (typeof process === 'undefined' || process.title === 'browser')
 
 var React = require('react/addons');
 
-function last(a) { return a[a.length - 1]; };
+function last(a) { return a[a.length - 1]; }
 function pad(a) { return (a < 10 ? '0' : '') + a; }
 
 var KEYS = {
@@ -13,9 +13,9 @@ var KEYS = {
   39: 'next'
 };
 
-var slideSchema = require('./data/slide-schema')
-//var SLIDES = require('./data/slides');
-var SLIDES = [];
+var slideSchema = require('./data/slide-schema');
+var SLIDES = require('./data/slides');
+//var SLIDES = [];
 
 var Form = require('./components/form');
 var Modal = require('./components/modal');
@@ -50,11 +50,13 @@ var App = React.createClass({
 
   doExport: function() {
     return console.log('TODO: do export');
+    /*
     this.setState({
       activeSlides: this.state.slides[0]
     });
 
     do { this.doSave(); } while (this.next());
+    */
   },
 
   onKeyPress: function(e) {
@@ -144,7 +146,7 @@ var App = React.createClass({
     this.startTranslate = {
       x: this.state.translateX,
       y: this.state.translateY,
-    }
+    };
   },
 
   moveAction: function(e) {

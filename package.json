@@ -1,5 +1,5 @@
 {
-  "name": "church-slide-builder",
+  "name": "slidenator",
   "version": "0.0.0",
   "description": "App to automate type-setting slides for RiverCharlotte.com",
   "main": "index.js",
