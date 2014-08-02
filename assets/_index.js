@@ -30,6 +30,7 @@ var App = React.createClass({
       zoom: 100,
       translateX: 0,
       translateY: 0,
+      isEditing: !SLIDES[0],
     };
   },
 
@@ -90,16 +91,29 @@ var App = React.createClass({
     return true;
   },
 
+  editSlide: function(changes) {
+    var activeSlideIndex = this.state.slides.indexOf(this.state.activeSlide);
+
+    var activeSlide = React.addons.update(this.state.activeSlide, {$merge: changes});
+    var updateSlide = {};
+    updateSlide[activeSlideIndex] = {$set: activeSlide};
+    var slides = React.addons.update(this.state.slides, updateSlide);
+
+    this.setState({activeSlide: activeSlide, slides: slides});
+  },
+
   addSlide: function(data) {
     var slide = {
       content: data.Content,
-      translation: data.Translation,
       verse: data.Verse,
+      translation: data.Translation,
+      width: data.Width,
     };
 
-    var slides = React.addons.update(this.state, {
-      slides: {$push: [slide]}
-    }).slides;
+    var slides = React.addons.update(
+      this.state.slides,
+      {$push: [slide]}
+    );
 
     this.setState({
       slides: slides,
@@ -130,7 +144,12 @@ var App = React.createClass({
   },
 
   zoomIn: function() {
-    this.setState({zoom: Math.min(100, this.state.zoom + 5)});
+    var zoom = Math.min(100, this.state.zoom + 5);
+    //console.log(this.state.zoom, zoom);
+    //var translateX = this.state.translateX;
+    //var translateY = this.state.translateY;
+
+    this.setState({zoom: zoom});
   },
 
   coords: function(e) {
@@ -188,7 +207,17 @@ var App = React.createClass({
     });
   },
 
+  toggleEdit: function() {
+    this.setState({isEditing: !this.state.isEditing});
+  },
+
   render: function() {
+    var onChange, editingSlide;
+    if (this.state.isEditing) {
+      onChange = this.editSlide;
+      editingSlide = this.state.activeSlide;
+    }
+
     return (
       <div>
         <div className="navbar">
@@ -222,8 +251,9 @@ var App = React.createClass({
         <div
           id="tools"
           ref="tools">
-          <Form schema={slideSchema} submitLabel="Add Slide" onSuccess={this.addSlide} />
+          <Form data={editingSlide} schema={slideSchema} submitLabel="Add Slide" onSuccess={this.addSlide} onChange={onChange} />
           <RippleButton onClick={this.removeSlide}>Remove Slide</RippleButton>
+          <RippleButton onClick={this.toggleEdit}>Edit Slide</RippleButton>
         </div>
 
         <Modal title={this.state.modalTitle} cancelHandler={this.setModal.bind(this, {})}>

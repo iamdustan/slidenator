@@ -9,7 +9,7 @@ var useKnuthPlass = false;
 
 var WIDTH = 1280;
 var HEIGHT = 720;
-var MAX_WIDTH = 1160;
+var MAX_WIDTH = 1060;
 var MAX_LINES = 5;
 var ALT_MAX_LINES = 8;
 var TOP_MARGIN = 120;
@@ -33,6 +33,7 @@ var Slide = React.createClass({
 
   draw: function() {
     var slide = this.slide();
+    if (typeof slide.width === 'undefined') slide.width = MAX_WIDTH;
     if (typeof slide === 'undefined') return;
     if (slide.type === 'list') return this.drawList();
 
@@ -58,9 +59,9 @@ var Slide = React.createClass({
 
     ctx.font = '300 64px Gotham';
     if (useKnuthPlass) {
-      ctx.translate((WIDTH - MAX_WIDTH) / 2,  TOP_MARGIN);
-      knuthPlass.call(this, slide, ctx, null, [MAX_WIDTH], 64 * 1.4, null);
-      ctx.translate(-(WIDTH - MAX_WIDTH) / 2, -TOP_MARGIN);
+      ctx.translate((WIDTH - slide.width) / 2,  TOP_MARGIN);
+      knuthPlass.call(this, slide, ctx, null, [slide.width], 64 * 1.4, null);
+      ctx.translate(-(WIDTH - slide.width) / 2, -TOP_MARGIN);
     }
     else {
       simple.call(this, slide, ctx, x, y);
@@ -87,7 +88,7 @@ var Slide = React.createClass({
     ctx.fillText(slide.title, x, 80);
 
     ctx.textAlign = 'left';
-    x = (WIDTH - MAX_WIDTH) / 2;
+    x = (WIDTH - slide.width) / 2;
 
     list.call(this, slide, ctx, x, y);
   },

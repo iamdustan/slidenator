@@ -16,7 +16,7 @@ function waveRadiusFn(touchDownMs, touchUpMs, anim) {
   var ww = anim.width, hh = anim.height;
   // use diagonal size of container to avoid floating point math sadness
   var waveRadius = Math.min(Math.sqrt(ww * ww + hh * hh), waveMaxRadius) * 1.1 + 5;
-  var duration = 1.1 - .2 * (waveRadius / waveMaxRadius);
+  var duration = 1.1 - 0.2 * (waveRadius / waveMaxRadius);
   var tt = (totalElapsed / duration);
 
   var size = waveRadius * (1 - Math.pow(80, -tt));
@@ -65,7 +65,7 @@ function waveDidFinish(wave, radius, anim) {
     return true;
   }
   return false;
-};
+}
 
 function waveAtMaximum(wave, radius, anim) {
   var waveOpacity = waveOpacityFn(wave.tDown, wave.tUp, anim);
@@ -113,7 +113,7 @@ function removeWaveFromScope(scope, wave) {
     var pos = scope.waves.indexOf(wave);
     scope.waves.splice(pos, 1);
   }
-};
+}
 
 // Shortcuts.
 var pow = Math.pow;
@@ -212,7 +212,7 @@ var PaperRipple = React.createClass({
         var translateFraction = waveGravityToCenterPercentageFn(tDown, tUp, wave.maxRadius);
 
         // This translates from the origin to the center of the view  based on the max dimension of
-        var translateFraction = Math.min(1, radius / wave.containerSize * 2 / Math.sqrt(2) );
+        translateFraction = Math.min(1, radius / wave.containerSize * 2 / Math.sqrt(2) );
 
         x += translateFraction * (wave.endPosition.x - wave.startPosition.x);
         y += translateFraction * (wave.endPosition.y - wave.startPosition.y);
@@ -243,7 +243,7 @@ var PaperRipple = React.createClass({
       requestAnimationFrame(this._loop);
     }
 
-    for (var i = 0; i < deleteTheseWaves.length; ++i) {
+    for (i = 0; i < deleteTheseWaves.length; ++i) {
       var wave = deleteTheseWaves[i];
       removeWaveFromScope(this, wave);
     }
@@ -295,7 +295,7 @@ var PaperRipple = React.createClass({
       // Declare the next wave that has mouse down to be mouse'ed up.
       var wave = this.state.waves[i];
       if (wave.isMouseDown) {
-        wave.isMouseDown = false
+        wave.isMouseDown = false;
         wave.mouseUpStart = now();
         wave.mouseDownStart = 0;
         wave.tUp = 0.0;
@@ -307,7 +307,7 @@ var PaperRipple = React.createClass({
   },
 
   componentDidMount: function() {
-    var canvas = this.refs.canvas.getDOMNode()
+    var canvas = this.refs.canvas.getDOMNode();
     canvas.setAttribute('width', canvas.clientWidth * this.state.pixelDensity + 'px');
     canvas.setAttribute('height', canvas.clientHeight * this.state.pixelDensity + 'px');
     var ctx = canvas.getContext('2d');
@@ -324,5 +324,4 @@ var PaperRipple = React.createClass({
 });
 
 module.exports = PaperRipple;
-
 

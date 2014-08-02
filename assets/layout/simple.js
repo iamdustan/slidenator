@@ -1,4 +1,3 @@
-var MAX_WIDTH = 1160;
 var MAX_LINES = 5;
 var ALT_MAX_LINES = 8;
 var TOP_MARGIN = 120;
@@ -24,7 +23,7 @@ module.exports = function(slide, ctx, x, y) {
     var testLine = line + words[n];
     var metrics = ctx.measureText(testLine);
     var testWidth = metrics.width;
-    if (testWidth > MAX_WIDTH && n > 0) {
+    if (testWidth > slide.width && n > 0) {
       lines.push({text: line, x: x, y: y });
       line = words[n] + ' ';
       y += Math.floor(64 * 1.4);

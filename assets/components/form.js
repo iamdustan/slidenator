@@ -11,9 +11,19 @@ var Form = React.createClass({
   },
 
   handleChange: function(e) {
-    var o = {};
+    var o = {}, self = this;
     o[e.target.name] = e.target.value;
-    this.setState(o);
+
+    if (e.target.type === 'number')
+      o[e.target.name] = Number(e.target.value);
+
+    if (typeof this.props.onChange === 'function') {
+      setTimeout(function() {
+        self.props.onChange(o);
+      });
+    }
+    else this.setState(o);
+
     return;
   },
 
@@ -36,6 +46,13 @@ var Form = React.createClass({
         <div key={key} className={className}>
           <label>{definition.key}</label>
           <input name={definition.key} type="string" value={this.state[definition.key]} onChange={this.handleChange} />
+        </div>
+      );
+    case 'number':
+      return (
+        <div key={key} className={className}>
+          <label>{definition.key}</label>
+          <input name={definition.key} type="number" max={definition.max} min={definition.min} step={definition.step} value={this.state[definition.key]} onChange={this.handleChange} />
         </div>
       );
     default:
@@ -64,6 +81,12 @@ var Form = React.createClass({
     }
     else {
       this.props.onSuccess(this.state);
+    }
+  },
+
+  componentWillReceiveProps: function(props) {
+    if (props.data) {
+      this.setState(props.data);
     }
   },
 
