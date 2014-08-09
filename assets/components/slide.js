@@ -12,7 +12,7 @@ var HEIGHT = 720;
 var MAX_WIDTH = 1060;
 var MAX_LINES = 5;
 var ALT_MAX_LINES = 8;
-var TOP_MARGIN = 120;
+var TOP_MARGIN = 160;
 
 var Slide = React.createClass({
 
@@ -57,6 +57,7 @@ var Slide = React.createClass({
       ctx.fillText(slide.verse + (slide.translation ? ' ' + slide.translation : ''), x, HEIGHT - 80);
     }
 
+    ctx.textAlign = 'left';
     ctx.font = '300 64px Gotham';
     if (useKnuthPlass) {
       ctx.translate((WIDTH - slide.width) / 2,  TOP_MARGIN);
@@ -64,7 +65,8 @@ var Slide = React.createClass({
       ctx.translate(-(WIDTH - slide.width) / 2, -TOP_MARGIN);
     }
     else {
-      simple.call(this, slide, ctx, x, y);
+      var _x = x - (slide.width / 2);
+      simple.call(this, slide, ctx, _x, y);
     }
 
     ctx.restore();

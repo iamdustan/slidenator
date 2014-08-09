@@ -1,6 +1,6 @@
 var MAX_LINES = 5;
 var ALT_MAX_LINES = 8;
-var TOP_MARGIN = 120;
+var TOP_MARGIN = 160;
 
 function getSlideDispersion(slidesCount, total) {
   var dispersion = Array.apply(0, Array(total)).reduce(function(memo, _, i) {
@@ -15,30 +15,46 @@ function getSlideDispersion(slidesCount, total) {
 
 module.exports = function(slide, ctx, x, y) {
   var LOCAL_MAX = slide.verse ? MAX_LINES : ALT_MAX_LINES;
-  var words = (slide.content || slide.quote).split(' ');
-  var lines = [];
-  var line = '';
+  var lines;
 
-  for (var n = 0; n < words.length; n++) {
-    var testLine = line + words[n];
-    var metrics = ctx.measureText(testLine);
-    var testWidth = metrics.width;
-    if (testWidth > slide.width && n > 0) {
-      lines.push({text: line, x: x, y: y });
-      line = words[n] + ' ';
-      y += Math.floor(64 * 1.4);
-    }
-    else {
-      line = testLine + ' ';
-    }
+  if (Array.isArray(slide.content)) {
+    // do nothing?
+    lines = slide.content;
+    LOCAL_MAX = lines.length;
   }
-  lines.push({text: line, x: x, y: y});
+  else {
+    var words = (slide.content || slide.quote).split(' ');
+    lines = [];
+    var line = '';
+    var quoteWidth = ctx.measureText('“').width;
+
+    for (var n = 0; n < words.length; n++) {
+      var testLine = line + words[n];
+      var metrics = ctx.measureText(testLine);
+      var testWidth = metrics.width;
+      //console.log(testWidth, slide.width, testLine);
+      if (testWidth > slide.width || (line[0] === '“' && testWidth - quoteWidth > slide.width)) {
+        line = line.split(' ');
+        line = line.slice(0, line.length - 1).join(' ');
+        if (line[0] ==='“') {
+          lines.push({text: line, x: x - quoteWidth});
+        }
+        else
+          lines.push({text: line, x: x});
+        line = words[n] + ' ';
+      }
+      else {
+        line = testLine + ' ';
+      }
+    }
+    lines.push({text: line, x: x});
+  }
 
   if (lines.length <= LOCAL_MAX) {
-    return lines.forEach(function(a) {
-      var y = (lines.length < 3) ? a.y + (64 * 1.4 * 2)
-        : (lines.length < 5) ? a.y + (64 * 1.4)
-        : a.y;
+    return lines.forEach(function(a, i) {
+      var y = TOP_MARGIN + (i * Math.floor(64 * 1.4));
+      if (lines.length < 4)
+        y += 64 * 1.4;
 
       ctx.fillText(a.text, a.x, y);
     });
@@ -52,7 +68,7 @@ module.exports = function(slide, ctx, x, y) {
     //var endIndex = startIndex + linesPerSlide;
     var endIndex = slideDispersion[i];
     return {
-      content: lines.splice(0, endIndex).reduce(function(s, c) { return s + c.text; }, ''),
+      content: lines.splice(0, endIndex),
       verse: slide.verse,
       translation: slide.translation
     };
