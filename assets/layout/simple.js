@@ -23,7 +23,7 @@ module.exports = function(slide, ctx, x, y) {
     LOCAL_MAX = lines.length;
   }
   else {
-    var words = (slide.content || slide.quote).split(' ');
+    var words = (slide.content || slide.quote || '').split(' ');
     lines = [];
     var line = '';
     var quoteWidth = ctx.measureText('“').width;

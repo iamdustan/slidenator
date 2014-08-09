@@ -33,8 +33,13 @@ var Slide = React.createClass({
 
   draw: function() {
     var slide = this.slide();
+
+    if (typeof slide === 'undefined') {
+      // empty state
+      return;
+    }
+
     if (typeof slide.width === 'undefined') slide.width = MAX_WIDTH;
-    if (typeof slide === 'undefined') return;
     if (slide.type === 'list') return this.drawList();
 
     var canvas = this.getDOMNode();

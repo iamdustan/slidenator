@@ -14,8 +14,12 @@ var KEYS = {
 };
 
 var slideSchema = require('./data/slide-schema');
-var SLIDES = require('./data/slides');
-//var SLIDES = [];
+//var SLIDES = require('./data/slides');
+var defaultSlide = {
+  content: 'To add a slide, use the panel on the right.',
+};
+
+var SLIDES = [defaultSlide];
 
 var Form = require('./components/form');
 var Modal = require('./components/modal');
@@ -30,7 +34,7 @@ var App = React.createClass({
       zoom: 100,
       translateX: 0,
       translateY: 0,
-      isEditing: !SLIDES[0],
+      isEditing: (SLIDES[0] && SLIDES[0] === defaultSlide),
     };
   },
 
@@ -125,8 +129,11 @@ var App = React.createClass({
     var activeIndex = this.activeIndex();
     var slides = this.state.slides.slice(activeIndex, 1);
     var newActive = activeIndex ? (activeIndex - 1) : 0;
+    if (slides.length === 0) {
+      slides[0] = defaultSlide;
+      newActive = 0;
+    }
     this.setState({slides: slides, activeSlide: slides[newActive]});
-    console.log('removed slide');
   },
 
   componentDidUnmount: function() {
