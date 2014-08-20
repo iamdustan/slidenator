@@ -1,8 +1,5 @@
 /** @jsx React.DOM */
 
-if (typeof process === 'undefined' || process.title === 'browser')
-  require('./marketing.css');
-
 var React = require('react/addons');
 var Ripple = require('./react-ripple');
 

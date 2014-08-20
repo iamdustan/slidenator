@@ -6,7 +6,7 @@ module.exports = {
   cache: true,
   entry: {
     app: './assets/index',
-    marketing: './assets/_marketing'
+    marketing: './assets/marketing'
   },
   output: {
     path: path.join(__dirname, STATIC_ROOT),

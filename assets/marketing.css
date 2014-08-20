@@ -1,17 +1,15 @@
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 body {
   background: #ccc;
   font-family: sans-serif;
   margin: 0;
   overflow: hidden;
   padding: 0;
-}
-
-.navbar {
-  background: #fff;
-  border-bottom: 2px solid #999;
-  padding: 0.333em;
-  position: relative;
-  z-index: 10;
 }
 
 .logo {
@@ -51,8 +49,80 @@ body {
   padding: 0.5em 1.6666em;
 }
 
-#menu {
-  display: inline-block;
+#banner {
+  color: #ddd;
+  padding: 5%;
+  position: relative;
+  text-align: center;
+}
+
+#banner p {
+}
+
+#banner h2 {
+  font-weight: normal;
+  line-height: 1.333;
+  margin: 1.5em auto;
+  width: 60%;
+}
+
+label {
+  display: block;
+  color: #aaa;
+  margin-left: 0.3em;
+  text-align: left;
+}
+
+label,
+input {
+  width: 100%;
+}
+
+input {
+  border: 0;
+  border-bottom: 2px solid #fff;
+  background: transparent;
+  font-size: 1.5em;
+  color: #fff;
+  padding: 0.21111em;
+  outline: 0;
+}
+
+.mc-field-group {
+  position: relative;
+  width: 60%;
+  margin: 0 auto;
+}
+
+.mc-field-group .button {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.tagline {
+  margin: 3em 0 8em;
+}
+
+.tagline p {
+  margin: 0;
+}
+
+#banner {
+}
+
+#banner > * {
+  position: relative;
+  z-index: 5;
+}
+
+#banner img {
+  border-bottom: 4px solid #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: 110%;
+  z-index: 0;
 }
 
 .paper-ripple {
@@ -63,4 +133,23 @@ body {
   height: 100%;
 }
 
+footer {
+  color: #888;
+  font-size: 0.75em;
+  margin-top: 12em;
+  text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+  #banner h2 {
+    font-size: 1.333em;
+    width: 95%;
+  }
+
+  .mc-field-group {
+    position: relative;
+    width: 95%;
+    margin: 0 auto;
+  }
+}
 
