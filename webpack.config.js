@@ -4,10 +4,13 @@ var STATIC_ROOT = 'public/'; // Public URL where statics live
 
 module.exports = {
   cache: true,
-  entry: './assets/index',
+  entry: {
+    app: './assets/index',
+    marketing: './assets/_marketing'
+  },
   output: {
     path: path.join(__dirname, STATIC_ROOT),
-    filename: 'app.js'
+    filename: '[name].js'
   },
   stats: {
     colors: true,

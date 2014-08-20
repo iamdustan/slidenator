@@ -36,6 +36,8 @@ var Slide = React.createClass({
 
     if (typeof slide === 'undefined') {
       // empty state
+      // TODO: this should be the responsibility of the app
+      // to set the default state
       return;
     }
 

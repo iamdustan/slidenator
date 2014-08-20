@@ -1,16 +1,20 @@
 /** @jsx React.DOM */
 
+if (typeof process === 'undefined' || process.title === 'browser')
+  require('./marketing.css');
+
 var React = require('react/addons');
 var Ripple = require('./react-ripple');
 
 var RippleButton = React.createClass({
 
   render: function() {
+    var node = this.props.node || React.DOM.button;
     return (
-      <button onClick={this.props.onClick}>
+      <node name={this.props.name} value={this.props.value} href={this.props.href} onClick={this.props.onClick} className="button">
         {this.props.children}
         <Ripple />
-      </button>
+      </node>
     );
   }
 });

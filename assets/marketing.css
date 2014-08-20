@@ -29,7 +29,9 @@ body {
 }
 
 .button {
+  background: #f26f53;
   border: 0;
+  color: #fff;
   cursor: pointer;
   display: inline-block;
   font-size: 1em;
@@ -53,85 +55,12 @@ body {
   display: inline-block;
 }
 
-#toolbar {
-  float: right;
-}
-
-#toolbar .button {
-  border: 0;
-  background: #eee;
-  border-bottom: 2px solid #ccc;
-  color: #aaa;
-  padding: 0.5em 0.666em;
-}
-
 .paper-ripple {
   position: absolute;
   bottom: 0;
   right: 0;
   width: 100%;
   height: 100%;
-}
-
-#artboard {
-  cursor: move;
-}
-
-#canvas {
-  transition: transform 0.05s linear;
-}
-
-#tools {
-  background: #eee;
-  padding: 0.333em;
-  position: fixed;
-  top: 53px;
-  bottom: 0;
-  right: 0;
-  width: 200px;
-  background: #fff;
-  border-left: 2px solid #999;
-}
-
-#tools .button {
-  width: 100%;
-
-  background: #f26f53;
-  border-bottom: 2px solid hsl(11, 93%, 38%);
-  color: #fff;
-  font-weight: 100;
-}
-
-#tools form .button {
-  margin-top: 0.666em;
-  padding: 0.666em;
-}
-
-form {
-}
-
-label {
-  color: #444;
-  display: block;
-  padding: 0.333em;
-}
-
-input,
-textarea {
-  border: 0;
-  border-bottom: 2px solid #999;
-  outline: 0;
-  padding: 0.333em;
-  width: 100%;
-}
-
-textarea {
-  height: 8em;
-}
-
-.modal {
-  position: absolute;
-  top: -50%;
 }
 
 

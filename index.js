@@ -42,10 +42,25 @@ var fs = require('fs');
 var React = require('react');
 
 var PLACEHOLDER = 'If you see this then something is wrong.';
+var SCRIPT = '{SCRIPT}';
 var TEMPLATE = fs.readFileSync('./assets/index.html', {encoding: 'utf8'});
 
 // React app.
 var App = require('./assets/_index.js');
+var Marketing = require('./assets/_marketing.js');
+
+server.route({
+  path: '/new',
+  method: 'GET',
+  config: {
+    handler: function(req, reply) {
+      if (process.env.NODE_ENV === 'development') TEMPLATE = fs.readFileSync('./assets/index.html', {encoding: 'utf8'});
+
+      var markup = React.renderComponentToString(App());
+      reply(TEMPLATE.replace(PLACEHOLDER, markup).replace(SCRIPT, js('app')));
+    }
+  }
+});
 
 server.route({
   path: '/',
@@ -54,8 +69,8 @@ server.route({
     handler: function(req, reply) {
       if (process.env.NODE_ENV === 'development') TEMPLATE = fs.readFileSync('./assets/index.html', {encoding: 'utf8'});
 
-      var markup = React.renderComponentToString(App());
-      reply(TEMPLATE.replace(PLACEHOLDER, markup));
+      var markup = React.renderComponentToString(Marketing());
+      reply(TEMPLATE.replace(PLACEHOLDER, markup).replace(SCRIPT, js('marketing')));
     }
   }
 });
@@ -80,4 +95,7 @@ server.route({
   }
 });
 
+function js(a) {
+  return '<script src="/public/' + a + '.js"></script>';
+}
 
