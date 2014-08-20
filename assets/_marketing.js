@@ -21,7 +21,7 @@ var Page = React.createClass({
             <p>Typographically perfect slides.</p>
             <p>Every time.</p>
             <div id="mc_embed_signup">
-              <form action="//slidenator.us8.list-manage.com/subscribe/post?u=afd4c67b56b540d9f00e06d22&amp;id=e225f51a66" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" className="validate" target="_blank" novalidate>
+              <form action="//slidenator.us8.list-manage.com/subscribe/post?u=afd4c67b56b540d9f00e06d22&amp;id=e225f51a66" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" className="validate" target="_blank" noValidate>
                 <h2>Slidenator will be released soon. Be the first to when Slidenator is released.</h2>
                 <div className="mc-field-group">
                   <label htmlFor="mce-EMAIL">Email Address</label>
@@ -31,7 +31,7 @@ var Page = React.createClass({
                   <div className="response" id="mce-error-response" style={{display:'none'}}></div>
                   <div className="response" id="mce-success-response" style={{display:'none'}}></div>
                 </div>
-                <div style={{position: 'absolute', left: '-5000px'}}><input type="text" name="b_afd4c67b56b540d9f00e06d22_e225f51a66" tabindex="-1" value="" /></div>
+                <div style={{position: 'absolute', left: '-5000px'}}><input type="text" name="b_afd4c67b56b540d9f00e06d22_e225f51a66" tabIndex="-1" value="" /></div>
                 <RippleButton value="Subscribe" name="subscribe" id="mc-embedded-subscribe">Sign up</RippleButton>
               </form>
             </div>
