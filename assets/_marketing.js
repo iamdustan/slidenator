@@ -29,7 +29,7 @@ var Page = React.createClass({
           </div>
           <div id="mc_embed_signup">
             <form action="//slidenator.us8.list-manage.com/subscribe/post?u=afd4c67b56b540d9f00e06d22&amp;id=e225f51a66" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" className="validate" target="_blank" noValidate>
-              <h2>Slidenator will be released soon. Be the first to when Slidenator is released.</h2>
+              <h2>Slidenator will be released soon. Be the first to know when Slidenator is available.</h2>
               <div className="mc-field-group">
                 <label htmlFor="mce-EMAIL">Email Address</label>
                 <input type="email" value={this.state.email} name="EMAIL" className="required email" id="mce-EMAIL" onChange={this.onChange} />
