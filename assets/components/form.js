@@ -2,7 +2,7 @@
 
 var React = require('react/addons');
 var Joi = require('joi');
-var Ripple = require('./react-ripple');
+var RippleButton = require('./ripple-button');
 
 var Form = React.createClass({
 
@@ -23,6 +23,7 @@ var Form = React.createClass({
       });
     }
     else this.setState(o);
+    // this.setState(o);
 
     return;
   },
@@ -33,7 +34,7 @@ var Form = React.createClass({
 
     switch (definition.schema._type) {
     case 'string':
-      if (definition.key === 'Content') {
+      if (definition.key === 'content') {
         return (
           <div key={key} className={className}>
             <label>{definition.key}</label>
@@ -97,7 +98,7 @@ var Form = React.createClass({
         {legend}
         {this.generateForm()}
         <div className="form__actions">
-          <button type="submit">{this.props.submitLabel || 'Submit'}<Ripple /></button>
+          <RippleButton onClick={this.removeSlide}>{this.props.submitLabel || 'Submit'}</RippleButton>
         </div>
       </form>
     );

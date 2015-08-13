@@ -13,6 +13,8 @@ var MAX_WIDTH = 1060;
 var MAX_LINES = 5;
 var ALT_MAX_LINES = 8;
 var TOP_MARGIN = 160;
+var FONT_SIZE = 48;
+var LINE_HEIGHT = Math.floor(FONT_SIZE * 1.4);
 
 var Slide = React.createClass({
 
@@ -63,17 +65,32 @@ var Slide = React.createClass({
       ctx.font = '300 54px Gotham';
       ctx.fillText(slide.verse + (slide.translation ? ' ' + slide.translation : ''), x, HEIGHT - 80);
     }
+    if (slide.title) {
+      ctx.font = '300 36px Gotham';
+      ctx.fillText(slide.title, x, TOP_MARGIN - FONT_SIZE);
+    }
 
-    ctx.textAlign = 'left';
-    ctx.font = '300 64px Gotham';
+    if (slide.type === 'title') {
+      ctx.textAlign = 'center';
+      ctx.font = '300 90px Gotham';
+    }
+    else {
+      ctx.textAlign = 'left';
+      ctx.font = '300 ' + FONT_SIZE + 'px Gotham';
+    }
     if (useKnuthPlass) {
       ctx.translate((WIDTH - slide.width) / 2,  TOP_MARGIN);
-      knuthPlass.call(this, slide, ctx, null, [slide.width], 64 * 1.4, null);
+      knuthPlass.call(this, slide, ctx, null, [slide.width], FONT_SIZE * 1.4, null);
       ctx.translate(-(WIDTH - slide.width) / 2, -TOP_MARGIN);
     }
     else {
-      var _x = x - (slide.width / 2);
-      simple.call(this, slide, ctx, _x, y);
+      if (ctx.textAlign === 'center') {
+        simple.call(this, slide, ctx, x, y);
+      }
+      else {
+        var _x = x - (slide.width / 2);
+        simple.call(this, slide, ctx, _x, y);
+      }
     }
 
     ctx.restore();
@@ -84,7 +101,7 @@ var Slide = React.createClass({
     var canvas = this.getDOMNode();
     var ctx = canvas.getContext('2d');
     var x = canvas.width / 2;
-    var y = TOP_MARGIN;
+    var y = TOP_MARGIN - 70;
 
     ctx.save();
     ctx.fillStyle = '#000000';
@@ -93,7 +110,7 @@ var Slide = React.createClass({
     ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'center';
 
-    ctx.font = '300 54px Gotham';
+    ctx.font = '300 ' + FONT_SIZE + 'px Gotham';
     ctx.fillText(slide.title, x, 80);
 
     ctx.textAlign = 'left';

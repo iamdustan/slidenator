@@ -1,17 +1,24 @@
-var MAX_WIDTH = 1160;
+var MAX_WIDTH = 1140;
 var MAX_LINES = 5;
 var ALT_MAX_LINES = 8;
-var TOP_MARGIN = 120;
+
+var HAS_BULLETS = false;
+var Y_OFFSET = 60;
 
 module.exports = function(slide, ctx, x, y) {
-  var LINE_HEIGHT = Math.floor(64 * 1.4);
+  var LINE_HEIGHT = Math.floor(48 * 1.1666);
   if (this.slides && this.slides[0]) {
     slide.items.forEach(function(a, i) {
       var y = a.y + LINE_HEIGHT;
 
       ctx.globalAlpha = a.opacity || 1;
-      ctx.fillText(a.index + '.', a.x, y);
-      ctx.fillText(a.text, a.x + 60, y);
+      if (HAS_BULLETS) {
+        ctx.fillText(a.index + '.', a.x, y + Y_OFFSET);
+        ctx.fillText(a.text, a.x + 60, y + Y_OFFSET);
+      }
+      else {
+        ctx.fillText(a.text, a.x, y + Y_OFFSET);
+      }
     });
   }
 
@@ -20,6 +27,8 @@ module.exports = function(slide, ctx, x, y) {
 
   function drawLine(content, index) {
     var line = '';
+    // if (typeof content.split === 'undefined') return content;
+
     var words = content.split(/\s+/g);
     for (var n = 0; n < words.length; n++) {
       var testLine = line + words[n];
@@ -35,7 +44,7 @@ module.exports = function(slide, ctx, x, y) {
       }
     }
     lines.push({text: line, x: x, y: y, index: index + 1});
-    y += LINE_HEIGHT;
+    y += LINE_HEIGHT + 20;
   }
 
   var numberOfSlides = lines.length;
@@ -49,9 +58,12 @@ module.exports = function(slide, ctx, x, y) {
         y: line.y,
         opacity: 1,
       };
+      /*
       if (index < i) {
         o.opacity = 0.5;
       }
+     */
+
       return o;
     }).filter(Boolean);
 

@@ -14,12 +14,15 @@ var KEYS = {
 };
 
 var slideSchema = require('./data/slide-schema');
-//var SLIDES = require('./data/slides');
 var defaultSlide = {
   content: 'To add a slide, use the panel on the right.',
 };
 
 var SLIDES = [defaultSlide];
+if (typeof localStorage !== 'undefined' && localStorage.getItem('slides') )
+  SLIDES = JSON.parse(localStorage.getItem('slides'));
+else
+  SLIDES = require('./data/slides');
 
 var Form = require('./components/form');
 var Modal = require('./components/modal');
@@ -103,6 +106,7 @@ var App = React.createClass({
     updateSlide[activeSlideIndex] = {$set: activeSlide};
     var slides = React.addons.update(this.state.slides, updateSlide);
 
+    localStorage.setItem('slides', JSON.stringify(slides));
     this.setState({activeSlide: activeSlide, slides: slides});
   },
 
@@ -199,6 +203,19 @@ var App = React.createClass({
   },
 
   componentDidMount: function() {
+    window.importSlides = function(o) {
+      console.log('transforming to json');
+      var slides = transformToJSON(o)
+      console.log('transformed to json');
+      console.log('setting state');
+      this.setState({
+        slides: slides,
+        activeSlide: slides[0],
+      });
+      console.log('enqued state');
+      return slides;
+    }.bind(this);
+
     var artboard = this.refs.artboard.getDOMNode();
     var slide = this.refs.slide.getDOMNode();
     var aw = artboard.clientWidth;

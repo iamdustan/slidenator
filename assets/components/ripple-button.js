@@ -8,7 +8,7 @@ var RippleButton = React.createClass({
   render: function() {
     var node = this.props.node || React.DOM.button;
     return (
-      <node name={this.props.name} value={this.props.value} href={this.props.href} onClick={this.props.onClick} className="button">
+      <node role="button" name={this.props.name} value={this.props.value} href={this.props.href} onClick={this.props.onClick} className="button">
         {this.props.children}
         <Ripple />
       </node>
